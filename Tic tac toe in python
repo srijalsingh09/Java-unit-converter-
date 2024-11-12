@@ -1,0 +1,67 @@
+# Tic Tac Toe game in Python
+
+# Define the board
+board = [' ' for _ in range(9)]
+
+# Function to print the board
+def print_board():
+    print('---------')
+    for row in [board[i:i + 3] for i in range(0, 9, 3)]:
+        print('| ' + ' | '.join(row) + ' |')
+        print('---------')
+
+# Function to check for a win
+def check_winner(player):
+    # Define winning combinations
+    winning_combinations = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Horizontal
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Vertical
+        [0, 4, 8], [2, 4, 6]              # Diagonal
+    ]
+    # Check if any winning combination has all slots occupied by the current player
+    for combo in winning_combinations:
+        if all(board[i] == player for i in combo):
+            return True
+    return False
+
+# Function to check for a tie
+def check_tie():
+    return ' ' not in board
+
+# Main function to handle the game logic
+def play_game():
+    current_player = 'X'  # X always starts first
+    while True:
+        print_board()
+        print(f"Player {current_player}'s turn")
+
+        # Get user input
+        try:
+            move = int(input('Enter a position (1-9): ')) - 1
+            if board[move] != ' ':
+                print("This position is already taken. Try again.")
+                continue
+        except (ValueError, IndexError):
+            print("Invalid input. Please enter a number between 1 and 9.")
+            continue
+
+        # Place player's move on the board
+        board[move] = current_player
+
+        # Check if the current player won
+        if check_winner(current_player):
+            print_board()
+            print(f"Player {current_player} wins!")
+            break
+
+        # Check if there's a tie
+        if check_tie():
+            print_board()
+            print("It's a tie!")
+            break
+
+        # Switch players
+        current_player = 'O' if current_player == 'X' else 'X'
+
+# Start the game
+play_game()
